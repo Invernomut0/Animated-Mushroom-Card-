@@ -1502,6 +1502,954 @@ export const ANIMATIONS: Record<string, AnimationDefinition> = {
     beforeAnimation: 'energy-core 1.5s ease-in-out infinite',
     afterAnimation: 'energy-rings 1s linear infinite',
   },
+
+  // ========== WATER DROPLET - Simulazione goccia d'acqua ==========
+  'water-droplet': {
+    name: 'water-droplet',
+    label: 'Water Droplet',
+    category: 'general',
+    keyframes: `
+      @keyframes droplet-fall {
+        0% { 
+          transform: translateY(-20px) scale(0.8); 
+          opacity: 0;
+        }
+        20% { 
+          transform: translateY(0) scale(1); 
+          opacity: 1;
+        }
+        40% { 
+          transform: translateY(5px) scaleY(0.6) scaleX(1.4); 
+        }
+        60% { 
+          transform: translateY(-3px) scaleY(1.2) scaleX(0.9); 
+        }
+        80% { 
+          transform: translateY(2px) scaleY(0.9) scaleX(1.1); 
+        }
+        100% { 
+          transform: translateY(0) scale(1); 
+        }
+      }
+      @keyframes ripple-expand {
+        0% {
+          box-shadow: 0 0 0 0 rgba(100, 200, 255, 0.8),
+                      0 0 0 0 rgba(100, 200, 255, 0.6),
+                      0 0 0 0 rgba(100, 200, 255, 0.4);
+          border-radius: 50%;
+        }
+        100% {
+          box-shadow: 0 0 0 20px rgba(100, 200, 255, 0),
+                      0 0 0 40px rgba(100, 200, 255, 0),
+                      0 0 0 60px rgba(100, 200, 255, 0);
+          border-radius: 50%;
+        }
+      }
+      @keyframes water-shimmer {
+        0%, 100% {
+          filter: brightness(1) saturate(1.2);
+          box-shadow: inset -3px -3px 8px rgba(255, 255, 255, 0.8),
+                      inset 3px 3px 8px rgba(0, 100, 200, 0.3),
+                      0 5px 15px rgba(100, 200, 255, 0.5);
+        }
+        50% {
+          filter: brightness(1.3) saturate(1.4);
+          box-shadow: inset -5px -5px 12px rgba(255, 255, 255, 1),
+                      inset 5px 5px 12px rgba(0, 100, 200, 0.5),
+                      0 8px 25px rgba(100, 200, 255, 0.7);
+        }
+      }
+    `,
+    shapeAnimation: 'droplet-fall 2s ease-in-out infinite',
+    beforeAnimation: 'water-shimmer 1.5s ease-in-out infinite',
+    afterAnimation: 'ripple-expand 2s ease-out infinite',
+  },
+
+  // ========== RAIN EFFECT - Effetto pioggia ==========
+  rain: {
+    name: 'rain',
+    label: 'Rain Effect',
+    category: 'climate',
+    keyframes: `
+      @keyframes rain-drops {
+        0% {
+          box-shadow: 
+            -15px -30px 0 -3px rgba(150, 200, 255, 0.9),
+            5px -25px 0 -3px rgba(150, 200, 255, 0.7),
+            15px -35px 0 -3px rgba(150, 200, 255, 0.8),
+            -8px -20px 0 -3px rgba(150, 200, 255, 0.6);
+        }
+        50% {
+          box-shadow: 
+            -15px 10px 0 -3px rgba(150, 200, 255, 0.9),
+            5px 15px 0 -3px rgba(150, 200, 255, 0.7),
+            15px 5px 0 -3px rgba(150, 200, 255, 0.8),
+            -8px 20px 0 -3px rgba(150, 200, 255, 0.6);
+        }
+        51% {
+          box-shadow: 
+            -15px -30px 0 -3px rgba(150, 200, 255, 0.9),
+            5px -25px 0 -3px rgba(150, 200, 255, 0.7),
+            15px -35px 0 -3px rgba(150, 200, 255, 0.8),
+            -8px -20px 0 -3px rgba(150, 200, 255, 0.6);
+        }
+        100% {
+          box-shadow: 
+            -15px 10px 0 -3px rgba(150, 200, 255, 0.9),
+            5px 15px 0 -3px rgba(150, 200, 255, 0.7),
+            15px 5px 0 -3px rgba(150, 200, 255, 0.8),
+            -8px 20px 0 -3px rgba(150, 200, 255, 0.6);
+        }
+      }
+      @keyframes rain-mist {
+        0%, 100% {
+          filter: blur(0px) brightness(1);
+          box-shadow: 0 0 20px 10px rgba(150, 200, 255, 0.3);
+        }
+        50% {
+          filter: blur(0.5px) brightness(1.1);
+          box-shadow: 0 0 30px 15px rgba(150, 200, 255, 0.5);
+        }
+      }
+      @keyframes splash {
+        0%, 100% {
+          box-shadow: 
+            -10px 25px 0 -4px rgba(150, 200, 255, 0),
+            10px 25px 0 -4px rgba(150, 200, 255, 0);
+        }
+        25% {
+          box-shadow: 
+            -15px 20px 0 -2px rgba(150, 200, 255, 0.8),
+            15px 20px 0 -2px rgba(150, 200, 255, 0.8);
+        }
+        50% {
+          box-shadow: 
+            -20px 15px 0 -4px rgba(150, 200, 255, 0),
+            20px 15px 0 -4px rgba(150, 200, 255, 0);
+        }
+      }
+    `,
+    shapeAnimation: 'rain-mist 2s ease-in-out infinite',
+    beforeAnimation: 'rain-drops 0.6s linear infinite',
+    afterAnimation: 'splash 0.8s ease-out infinite',
+  },
+
+  // ========== FIRE INFERNO - Effetto fuoco realistico ==========
+  'fire-inferno': {
+    name: 'fire-inferno',
+    label: 'Fire Inferno',
+    category: 'climate',
+    keyframes: `
+      @keyframes fire-dance {
+        0% { 
+          transform: translateY(0) scaleY(1) scaleX(1); 
+          filter: brightness(1) hue-rotate(0deg);
+        }
+        10% { 
+          transform: translateY(-3px) scaleY(1.1) scaleX(0.95); 
+          filter: brightness(1.2) hue-rotate(-10deg);
+        }
+        20% { 
+          transform: translateY(-1px) scaleY(0.95) scaleX(1.05); 
+          filter: brightness(0.9) hue-rotate(5deg);
+        }
+        30% { 
+          transform: translateY(-4px) scaleY(1.15) scaleX(0.9); 
+          filter: brightness(1.4) hue-rotate(-15deg);
+        }
+        40% { 
+          transform: translateY(-2px) scaleY(1.05) scaleX(1); 
+          filter: brightness(1.1) hue-rotate(0deg);
+        }
+        50% { 
+          transform: translateY(-5px) scaleY(1.2) scaleX(0.85); 
+          filter: brightness(1.5) hue-rotate(-20deg);
+        }
+        60% { 
+          transform: translateY(-3px) scaleY(1) scaleX(1.02); 
+          filter: brightness(1) hue-rotate(8deg);
+        }
+        70% { 
+          transform: translateY(-6px) scaleY(1.18) scaleX(0.92); 
+          filter: brightness(1.3) hue-rotate(-12deg);
+        }
+        80% { 
+          transform: translateY(-2px) scaleY(0.98) scaleX(1.04); 
+          filter: brightness(0.95) hue-rotate(3deg);
+        }
+        90% { 
+          transform: translateY(-4px) scaleY(1.12) scaleX(0.96); 
+          filter: brightness(1.25) hue-rotate(-8deg);
+        }
+        100% { 
+          transform: translateY(0) scaleY(1) scaleX(1); 
+          filter: brightness(1) hue-rotate(0deg);
+        }
+      }
+      @keyframes fire-glow-layers {
+        0%, 100% {
+          box-shadow: 
+            0 0 20px 10px rgba(255, 100, 0, 0.8),
+            0 -10px 30px 15px rgba(255, 200, 0, 0.6),
+            0 -20px 40px 20px rgba(255, 50, 0, 0.4),
+            0 0 60px 30px rgba(255, 0, 0, 0.2);
+        }
+        25% {
+          box-shadow: 
+            0 0 25px 12px rgba(255, 150, 0, 0.9),
+            0 -15px 35px 18px rgba(255, 220, 0, 0.7),
+            0 -25px 50px 25px rgba(255, 80, 0, 0.5),
+            0 0 70px 35px rgba(255, 30, 0, 0.3);
+        }
+        50% {
+          box-shadow: 
+            0 0 30px 15px rgba(255, 180, 0, 1),
+            0 -20px 40px 22px rgba(255, 240, 100, 0.8),
+            0 -30px 60px 30px rgba(255, 100, 0, 0.6),
+            0 0 80px 40px rgba(255, 50, 0, 0.35);
+        }
+        75% {
+          box-shadow: 
+            0 0 22px 11px rgba(255, 120, 0, 0.85),
+            0 -12px 32px 16px rgba(255, 200, 50, 0.65),
+            0 -22px 45px 22px rgba(255, 60, 0, 0.45),
+            0 0 65px 32px rgba(255, 20, 0, 0.25);
+        }
+      }
+      @keyframes ember-sparks {
+        0% {
+          box-shadow: 
+            -8px -15px 0 -4px rgba(255, 200, 50, 0),
+            8px -20px 0 -4px rgba(255, 150, 0, 0),
+            0px -25px 0 -4px rgba(255, 100, 0, 0);
+        }
+        20% {
+          box-shadow: 
+            -12px -25px 0 -3px rgba(255, 200, 50, 1),
+            12px -30px 0 -3px rgba(255, 150, 0, 0.8),
+            -5px -35px 0 -3px rgba(255, 100, 0, 0.6);
+        }
+        100% {
+          box-shadow: 
+            -20px -50px 0 -5px rgba(255, 200, 50, 0),
+            20px -55px 0 -5px rgba(255, 150, 0, 0),
+            -10px -60px 0 -5px rgba(255, 100, 0, 0);
+        }
+      }
+    `,
+    shapeAnimation: 'fire-dance 0.8s ease-in-out infinite',
+    beforeAnimation: 'fire-glow-layers 1.2s ease-in-out infinite',
+    afterAnimation: 'ember-sparks 1.5s ease-out infinite',
+  },
+
+  // ========== RAYTRACING REFLECTION - Effetto riflessione luce ==========
+  raytracing: {
+    name: 'raytracing',
+    label: 'Raytracing Reflection',
+    category: 'lights',
+    keyframes: `
+      @keyframes ray-sweep {
+        0% {
+          background: linear-gradient(
+            135deg,
+            transparent 0%,
+            transparent 40%,
+            rgba(255, 255, 255, 0) 40%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0) 60%,
+            transparent 60%,
+            transparent 100%
+          );
+          background-size: 200% 200%;
+          background-position: 100% 100%;
+        }
+        50% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: -100% -100%;
+        }
+      }
+      @keyframes metallic-shine {
+        0%, 100% {
+          box-shadow: 
+            inset -8px -8px 20px rgba(255, 255, 255, 0.9),
+            inset 8px 8px 20px rgba(0, 0, 0, 0.2),
+            0 0 30px 10px rgba(var(--rgb-icon-color), 0.4),
+            -10px -10px 30px rgba(255, 255, 255, 0.3),
+            10px 10px 30px rgba(0, 0, 0, 0.2);
+          filter: brightness(1.1) contrast(1.1);
+        }
+        50% {
+          box-shadow: 
+            inset -12px -12px 25px rgba(255, 255, 255, 1),
+            inset 12px 12px 25px rgba(0, 0, 0, 0.3),
+            0 0 40px 15px rgba(var(--rgb-icon-color), 0.6),
+            -15px -15px 40px rgba(255, 255, 255, 0.5),
+            15px 15px 40px rgba(0, 0, 0, 0.3);
+          filter: brightness(1.3) contrast(1.2);
+        }
+      }
+      @keyframes light-caustics {
+        0% {
+          box-shadow: 
+            20px 0 40px -20px rgba(255, 255, 255, 0.8),
+            -20px 20px 40px -20px rgba(var(--rgb-icon-color), 0.4);
+        }
+        33% {
+          box-shadow: 
+            -10px 20px 40px -20px rgba(255, 255, 255, 0.8),
+            20px -10px 40px -20px rgba(var(--rgb-icon-color), 0.4);
+        }
+        66% {
+          box-shadow: 
+            -20px -10px 40px -20px rgba(255, 255, 255, 0.8),
+            10px 20px 40px -20px rgba(var(--rgb-icon-color), 0.4);
+        }
+        100% {
+          box-shadow: 
+            20px 0 40px -20px rgba(255, 255, 255, 0.8),
+            -20px 20px 40px -20px rgba(var(--rgb-icon-color), 0.4);
+        }
+      }
+    `,
+    shapeAnimation: 'ray-sweep 3s linear infinite',
+    beforeAnimation: 'metallic-shine 2s ease-in-out infinite',
+    afterAnimation: 'light-caustics 4s linear infinite',
+  },
+
+  // ========== GLASS REFRACTION - Effetto vetro/cristallo ==========
+  glass: {
+    name: 'glass',
+    label: 'Glass Refraction',
+    category: 'general',
+    keyframes: `
+      @keyframes glass-shimmer {
+        0%, 100% {
+          filter: brightness(1) saturate(1.1);
+          box-shadow: 
+            inset 0 0 20px rgba(255, 255, 255, 0.5),
+            inset -5px -5px 15px rgba(255, 255, 255, 0.8),
+            inset 5px 5px 15px rgba(200, 220, 255, 0.3),
+            0 0 20px 5px rgba(200, 220, 255, 0.3);
+        }
+        50% {
+          filter: brightness(1.2) saturate(1.3);
+          box-shadow: 
+            inset 0 0 30px rgba(255, 255, 255, 0.7),
+            inset -8px -8px 20px rgba(255, 255, 255, 1),
+            inset 8px 8px 20px rgba(200, 220, 255, 0.5),
+            0 0 30px 10px rgba(200, 220, 255, 0.5);
+        }
+      }
+      @keyframes prism-colors {
+        0% {
+          box-shadow: 
+            -15px 0 20px -10px rgba(255, 0, 0, 0.4),
+            -8px 0 20px -10px rgba(255, 165, 0, 0.4),
+            0px 0 20px -10px rgba(255, 255, 0, 0.4),
+            8px 0 20px -10px rgba(0, 255, 0, 0.4),
+            15px 0 20px -10px rgba(0, 0, 255, 0.4);
+        }
+        50% {
+          box-shadow: 
+            15px 0 25px -10px rgba(255, 0, 0, 0.6),
+            8px 0 25px -10px rgba(255, 165, 0, 0.6),
+            0px 0 25px -10px rgba(255, 255, 0, 0.6),
+            -8px 0 25px -10px rgba(0, 255, 0, 0.6),
+            -15px 0 25px -10px rgba(0, 0, 255, 0.6);
+        }
+        100% {
+          box-shadow: 
+            -15px 0 20px -10px rgba(255, 0, 0, 0.4),
+            -8px 0 20px -10px rgba(255, 165, 0, 0.4),
+            0px 0 20px -10px rgba(255, 255, 0, 0.4),
+            8px 0 20px -10px rgba(0, 255, 0, 0.4),
+            15px 0 20px -10px rgba(0, 0, 255, 0.4);
+        }
+      }
+      @keyframes refraction-move {
+        0%, 100% { transform: scale(1) rotate(0deg); }
+        25% { transform: scale(1.02) rotate(1deg); }
+        50% { transform: scale(1.04) rotate(0deg); }
+        75% { transform: scale(1.02) rotate(-1deg); }
+      }
+    `,
+    shapeAnimation: 'refraction-move 4s ease-in-out infinite',
+    beforeAnimation: 'glass-shimmer 2s ease-in-out infinite',
+    afterAnimation: 'prism-colors 3s ease-in-out infinite',
+  },
+
+  // ========== LIQUID METAL - Effetto metallo liquido ==========
+  'liquid-metal': {
+    name: 'liquid-metal',
+    label: 'Liquid Metal',
+    category: 'general',
+    keyframes: `
+      @keyframes metal-morph {
+        0%, 100% { 
+          border-radius: 50%; 
+          transform: scale(1);
+        }
+        25% { 
+          border-radius: 60% 40% 55% 45% / 55% 45% 60% 40%; 
+          transform: scale(1.02);
+        }
+        50% { 
+          border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%; 
+          transform: scale(1.04);
+        }
+        75% { 
+          border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%; 
+          transform: scale(1.02);
+        }
+      }
+      @keyframes chrome-reflection {
+        0%, 100% {
+          box-shadow: 
+            inset -10px -10px 30px rgba(255, 255, 255, 1),
+            inset 10px 10px 30px rgba(80, 80, 100, 0.8),
+            inset 0 0 20px rgba(200, 200, 220, 0.5),
+            0 0 30px 10px rgba(150, 150, 180, 0.4),
+            0 10px 40px rgba(0, 0, 0, 0.3);
+          filter: brightness(1.1) contrast(1.2);
+        }
+        50% {
+          box-shadow: 
+            inset -15px -15px 40px rgba(255, 255, 255, 1),
+            inset 15px 15px 40px rgba(60, 60, 80, 0.9),
+            inset 0 0 30px rgba(220, 220, 240, 0.6),
+            0 0 40px 15px rgba(150, 150, 180, 0.5),
+            0 15px 50px rgba(0, 0, 0, 0.4);
+          filter: brightness(1.3) contrast(1.3);
+        }
+      }
+      @keyframes ripple-surface {
+        0% {
+          box-shadow: 
+            0 0 0 0 rgba(200, 200, 220, 0.6),
+            0 0 0 0 rgba(200, 200, 220, 0.4);
+        }
+        100% {
+          box-shadow: 
+            0 0 0 15px rgba(200, 200, 220, 0),
+            0 0 0 30px rgba(200, 200, 220, 0);
+        }
+      }
+    `,
+    shapeAnimation: 'metal-morph 4s ease-in-out infinite',
+    beforeAnimation: 'chrome-reflection 2.5s ease-in-out infinite',
+    afterAnimation: 'ripple-surface 2s ease-out infinite',
+  },
+
+  // ========== HOLOGRAM - Effetto ologramma sci-fi ==========
+  hologram: {
+    name: 'hologram',
+    label: 'Hologram',
+    category: 'media',
+    keyframes: `
+      @keyframes holo-flicker {
+        0%, 100% { 
+          opacity: 1; 
+          transform: scale(1) translateY(0);
+        }
+        5% { opacity: 0.8; transform: scale(1.01) translateY(-1px); }
+        10% { opacity: 1; transform: scale(1) translateY(0); }
+        15% { opacity: 0.6; transform: scale(0.99) translateY(1px); }
+        20% { opacity: 1; transform: scale(1) translateY(0); }
+        50% { opacity: 0.9; transform: scale(1.02) translateY(-2px); }
+        52% { opacity: 1; transform: scale(1) translateY(0); }
+        80% { opacity: 0.85; transform: scale(1.01) translateY(1px); }
+        82% { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      @keyframes scan-lines {
+        0% {
+          background: repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 255, 255, 0.1) 2px,
+            rgba(0, 255, 255, 0.1) 4px
+          );
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 0 100px;
+        }
+      }
+      @keyframes holo-glow {
+        0%, 100% {
+          box-shadow: 
+            0 0 20px 5px rgba(0, 255, 255, 0.5),
+            0 0 40px 10px rgba(0, 200, 255, 0.3),
+            0 0 60px 20px rgba(0, 150, 255, 0.2),
+            inset 0 0 20px rgba(0, 255, 255, 0.2);
+          filter: hue-rotate(0deg);
+        }
+        33% {
+          box-shadow: 
+            0 0 25px 8px rgba(0, 255, 200, 0.6),
+            0 0 50px 15px rgba(0, 255, 150, 0.4),
+            0 0 70px 25px rgba(0, 200, 100, 0.25),
+            inset 0 0 25px rgba(0, 255, 200, 0.3);
+          filter: hue-rotate(20deg);
+        }
+        66% {
+          box-shadow: 
+            0 0 22px 6px rgba(100, 255, 255, 0.55),
+            0 0 45px 12px rgba(50, 200, 255, 0.35),
+            0 0 65px 22px rgba(0, 150, 200, 0.22),
+            inset 0 0 22px rgba(100, 255, 255, 0.25);
+          filter: hue-rotate(-10deg);
+        }
+      }
+    `,
+    shapeAnimation: 'holo-flicker 2s linear infinite',
+    beforeAnimation: 'holo-glow 3s ease-in-out infinite',
+    afterAnimation: 'scan-lines 1s linear infinite',
+  },
+
+  // ========== AURORA BOREALIS - Effetto aurora ==========
+  aurora: {
+    name: 'aurora',
+    label: 'Aurora Borealis',
+    category: 'lights',
+    keyframes: `
+      @keyframes aurora-wave {
+        0%, 100% { 
+          transform: scaleY(1) scaleX(1); 
+          filter: hue-rotate(0deg) brightness(1);
+        }
+        25% { 
+          transform: scaleY(1.1) scaleX(0.95); 
+          filter: hue-rotate(30deg) brightness(1.2);
+        }
+        50% { 
+          transform: scaleY(0.95) scaleX(1.05); 
+          filter: hue-rotate(60deg) brightness(1.1);
+        }
+        75% { 
+          transform: scaleY(1.05) scaleX(0.98); 
+          filter: hue-rotate(30deg) brightness(1.15);
+        }
+      }
+      @keyframes aurora-colors {
+        0%, 100% {
+          box-shadow: 
+            0 -20px 40px 10px rgba(0, 255, 100, 0.6),
+            0 -40px 60px 20px rgba(0, 200, 255, 0.4),
+            0 -60px 80px 30px rgba(100, 0, 255, 0.3),
+            0 0 30px 10px rgba(0, 255, 150, 0.3);
+        }
+        33% {
+          box-shadow: 
+            0 -25px 50px 15px rgba(0, 200, 255, 0.7),
+            0 -50px 70px 25px rgba(150, 0, 255, 0.5),
+            0 -70px 90px 35px rgba(255, 0, 200, 0.35),
+            0 0 35px 12px rgba(0, 200, 255, 0.35);
+        }
+        66% {
+          box-shadow: 
+            0 -22px 45px 12px rgba(100, 255, 0, 0.65),
+            0 -45px 65px 22px rgba(0, 255, 200, 0.45),
+            0 -65px 85px 32px rgba(200, 100, 255, 0.32),
+            0 0 32px 11px rgba(100, 255, 100, 0.32);
+        }
+      }
+      @keyframes aurora-shimmer {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+      }
+    `,
+    shapeAnimation: 'aurora-wave 5s ease-in-out infinite',
+    beforeAnimation: 'aurora-colors 7s ease-in-out infinite',
+    afterAnimation: 'aurora-shimmer 2s ease-in-out infinite',
+  },
+
+  // ========== PLASMA ORB - Effetto plasma ==========
+  plasma: {
+    name: 'plasma',
+    label: 'Plasma Orb',
+    category: 'sensors',
+    keyframes: `
+      @keyframes plasma-pulse {
+        0%, 100% { 
+          transform: scale(1); 
+          filter: brightness(1) saturate(1.2);
+        }
+        50% { 
+          transform: scale(1.08); 
+          filter: brightness(1.4) saturate(1.5);
+        }
+      }
+      @keyframes plasma-tendrils {
+        0% {
+          box-shadow: 
+            15px 0 30px -10px rgba(200, 0, 255, 0.8),
+            -15px 0 30px -10px rgba(0, 100, 255, 0.8),
+            0 15px 30px -10px rgba(255, 0, 100, 0.8),
+            0 -15px 30px -10px rgba(100, 255, 0, 0.8);
+        }
+        25% {
+          box-shadow: 
+            0 15px 35px -10px rgba(200, 0, 255, 0.9),
+            0 -15px 35px -10px rgba(0, 100, 255, 0.9),
+            15px 0 35px -10px rgba(255, 0, 100, 0.9),
+            -15px 0 35px -10px rgba(100, 255, 0, 0.9);
+        }
+        50% {
+          box-shadow: 
+            -15px 0 40px -10px rgba(200, 0, 255, 1),
+            15px 0 40px -10px rgba(0, 100, 255, 1),
+            0 -15px 40px -10px rgba(255, 0, 100, 1),
+            0 15px 40px -10px rgba(100, 255, 0, 1);
+        }
+        75% {
+          box-shadow: 
+            0 -15px 35px -10px rgba(200, 0, 255, 0.9),
+            0 15px 35px -10px rgba(0, 100, 255, 0.9),
+            -15px 0 35px -10px rgba(255, 0, 100, 0.9),
+            15px 0 35px -10px rgba(100, 255, 0, 0.9);
+        }
+        100% {
+          box-shadow: 
+            15px 0 30px -10px rgba(200, 0, 255, 0.8),
+            -15px 0 30px -10px rgba(0, 100, 255, 0.8),
+            0 15px 30px -10px rgba(255, 0, 100, 0.8),
+            0 -15px 30px -10px rgba(100, 255, 0, 0.8);
+        }
+      }
+      @keyframes electric-arc {
+        0%, 100% {
+          box-shadow: 
+            inset 0 0 20px rgba(255, 255, 255, 0.8),
+            inset 0 0 40px rgba(200, 100, 255, 0.4);
+        }
+        25% {
+          box-shadow: 
+            inset 5px -5px 25px rgba(255, 255, 255, 1),
+            inset -5px 5px 50px rgba(100, 200, 255, 0.5);
+        }
+        50% {
+          box-shadow: 
+            inset 0 0 30px rgba(255, 255, 255, 0.9),
+            inset 0 0 60px rgba(255, 100, 200, 0.6);
+        }
+        75% {
+          box-shadow: 
+            inset -5px 5px 25px rgba(255, 255, 255, 1),
+            inset 5px -5px 50px rgba(200, 255, 100, 0.5);
+        }
+      }
+    `,
+    shapeAnimation: 'plasma-pulse 1.5s ease-in-out infinite',
+    beforeAnimation: 'electric-arc 0.8s ease-in-out infinite',
+    afterAnimation: 'plasma-tendrils 2s linear infinite',
+  },
+
+  // ========== SHADOW DEPTH - Effetto profondità ombre ==========
+  'shadow-depth': {
+    name: 'shadow-depth',
+    label: 'Shadow Depth',
+    category: 'general',
+    keyframes: `
+      @keyframes float-shadow {
+        0%, 100% { 
+          transform: translateY(0); 
+        }
+        50% { 
+          transform: translateY(-8px); 
+        }
+      }
+      @keyframes dynamic-shadow {
+        0%, 100% {
+          box-shadow: 
+            0 5px 15px rgba(0, 0, 0, 0.3),
+            0 10px 30px rgba(0, 0, 0, 0.2),
+            0 15px 50px rgba(0, 0, 0, 0.1),
+            0 0 20px 5px rgba(var(--rgb-icon-color), 0.2);
+        }
+        50% {
+          box-shadow: 
+            0 15px 25px rgba(0, 0, 0, 0.4),
+            0 25px 50px rgba(0, 0, 0, 0.25),
+            0 35px 70px rgba(0, 0, 0, 0.15),
+            0 0 30px 10px rgba(var(--rgb-icon-color), 0.3);
+        }
+      }
+      @keyframes ambient-occlusion {
+        0%, 100% {
+          box-shadow: 
+            inset 0 -5px 15px rgba(0, 0, 0, 0.1),
+            inset 0 5px 15px rgba(255, 255, 255, 0.1);
+          filter: brightness(1);
+        }
+        50% {
+          box-shadow: 
+            inset 0 -8px 20px rgba(0, 0, 0, 0.15),
+            inset 0 8px 20px rgba(255, 255, 255, 0.15);
+          filter: brightness(1.05);
+        }
+      }
+    `,
+    shapeAnimation: 'float-shadow 3s ease-in-out infinite',
+    beforeAnimation: 'ambient-occlusion 3s ease-in-out infinite',
+    afterAnimation: 'dynamic-shadow 3s ease-in-out infinite',
+  },
+
+  // ========== OCEAN WAVE - Effetto onde oceaniche ==========
+  ocean: {
+    name: 'ocean',
+    label: 'Ocean Wave',
+    category: 'climate',
+    keyframes: `
+      @keyframes wave-motion {
+        0%, 100% { 
+          transform: translateX(0) translateY(0) rotate(0deg); 
+        }
+        25% { 
+          transform: translateX(3px) translateY(-2px) rotate(2deg); 
+        }
+        50% { 
+          transform: translateX(0) translateY(-4px) rotate(0deg); 
+        }
+        75% { 
+          transform: translateX(-3px) translateY(-2px) rotate(-2deg); 
+        }
+      }
+      @keyframes wave-layers {
+        0%, 100% {
+          box-shadow: 
+            0 10px 30px -15px rgba(0, 100, 200, 0.6),
+            0 20px 40px -20px rgba(0, 150, 255, 0.4),
+            0 30px 50px -25px rgba(0, 200, 255, 0.3),
+            0 -5px 20px -10px rgba(100, 200, 255, 0.5);
+        }
+        50% {
+          box-shadow: 
+            0 15px 35px -15px rgba(0, 120, 220, 0.7),
+            0 25px 45px -20px rgba(0, 170, 255, 0.5),
+            0 35px 55px -25px rgba(50, 220, 255, 0.4),
+            0 -8px 25px -10px rgba(120, 220, 255, 0.6);
+        }
+      }
+      @keyframes foam-particles {
+        0%, 100% {
+          box-shadow: 
+            -8px -5px 0 -4px rgba(255, 255, 255, 0.0),
+            8px -3px 0 -4px rgba(255, 255, 255, 0.0),
+            0px -8px 0 -4px rgba(255, 255, 255, 0.0);
+        }
+        30% {
+          box-shadow: 
+            -12px -10px 0 -3px rgba(255, 255, 255, 0.8),
+            12px -8px 0 -3px rgba(255, 255, 255, 0.6),
+            0px -15px 0 -3px rgba(255, 255, 255, 0.7);
+        }
+        60% {
+          box-shadow: 
+            -18px -18px 0 -4px rgba(255, 255, 255, 0.4),
+            18px -15px 0 -4px rgba(255, 255, 255, 0.3),
+            0px -22px 0 -4px rgba(255, 255, 255, 0.35);
+        }
+      }
+    `,
+    shapeAnimation: 'wave-motion 3s ease-in-out infinite',
+    beforeAnimation: 'wave-layers 2.5s ease-in-out infinite',
+    afterAnimation: 'foam-particles 2s ease-out infinite',
+  },
+
+  // ========== GALAXY SWIRL - Effetto galassia/vortice ==========
+  galaxy: {
+    name: 'galaxy',
+    label: 'Galaxy Swirl',
+    category: 'lights',
+    keyframes: `
+      @keyframes galaxy-rotate {
+        0% { 
+          transform: rotate(0deg) scale(1); 
+          filter: hue-rotate(0deg);
+        }
+        100% { 
+          transform: rotate(360deg) scale(1); 
+          filter: hue-rotate(360deg);
+        }
+      }
+      @keyframes star-field {
+        0%, 100% {
+          box-shadow: 
+            8px 5px 0 -3px rgba(255, 255, 255, 0.9),
+            -10px 8px 0 -3px rgba(255, 200, 100, 0.8),
+            12px -6px 0 -3px rgba(100, 200, 255, 0.85),
+            -8px -10px 0 -3px rgba(255, 100, 200, 0.9),
+            3px 12px 0 -3px rgba(200, 255, 100, 0.8),
+            -5px -5px 0 -2px rgba(255, 255, 200, 1);
+        }
+        50% {
+          box-shadow: 
+            -8px -5px 0 -3px rgba(255, 255, 255, 0.9),
+            10px -8px 0 -3px rgba(255, 200, 100, 0.8),
+            -12px 6px 0 -3px rgba(100, 200, 255, 0.85),
+            8px 10px 0 -3px rgba(255, 100, 200, 0.9),
+            -3px -12px 0 -3px rgba(200, 255, 100, 0.8),
+            5px 5px 0 -2px rgba(255, 255, 200, 1);
+        }
+      }
+      @keyframes nebula-glow {
+        0%, 100% {
+          box-shadow: 
+            0 0 30px 15px rgba(100, 0, 200, 0.5),
+            0 0 60px 30px rgba(0, 100, 200, 0.3),
+            0 0 90px 45px rgba(200, 0, 100, 0.2);
+        }
+        50% {
+          box-shadow: 
+            0 0 40px 20px rgba(200, 0, 100, 0.6),
+            0 0 80px 40px rgba(100, 200, 0, 0.4),
+            0 0 120px 60px rgba(0, 100, 200, 0.25);
+        }
+      }
+    `,
+    shapeAnimation: 'galaxy-rotate 20s linear infinite',
+    beforeAnimation: 'nebula-glow 5s ease-in-out infinite',
+    afterAnimation: 'star-field 3s ease-in-out infinite',
+  },
+
+  // ========== FROST ICE - Effetto ghiaccio/brina ==========
+  frost: {
+    name: 'frost',
+    label: 'Frost Ice',
+    category: 'climate',
+    keyframes: `
+      @keyframes frost-breathe {
+        0%, 100% { 
+          transform: scale(1); 
+          filter: brightness(1) contrast(1.1);
+        }
+        50% { 
+          transform: scale(1.03); 
+          filter: brightness(1.15) contrast(1.2);
+        }
+      }
+      @keyframes ice-crystals {
+        0%, 100% {
+          box-shadow: 
+            inset -5px -5px 15px rgba(255, 255, 255, 0.9),
+            inset 5px 5px 15px rgba(150, 200, 255, 0.4),
+            0 0 20px 5px rgba(180, 220, 255, 0.5),
+            0 0 40px 10px rgba(150, 200, 255, 0.3);
+        }
+        50% {
+          box-shadow: 
+            inset -8px -8px 20px rgba(255, 255, 255, 1),
+            inset 8px 8px 20px rgba(150, 200, 255, 0.6),
+            0 0 30px 10px rgba(180, 220, 255, 0.7),
+            0 0 60px 20px rgba(150, 200, 255, 0.4);
+        }
+      }
+      @keyframes frost-sparkle {
+        0% {
+          box-shadow: 
+            10px -5px 0 -4px rgba(255, 255, 255, 0),
+            -8px 10px 0 -4px rgba(200, 230, 255, 0),
+            5px 8px 0 -4px rgba(255, 255, 255, 0);
+        }
+        25% {
+          box-shadow: 
+            10px -5px 0 -3px rgba(255, 255, 255, 1),
+            -8px 10px 0 -3px rgba(200, 230, 255, 0.8),
+            5px 8px 0 -3px rgba(255, 255, 255, 0.9);
+        }
+        50% {
+          box-shadow: 
+            -10px 5px 0 -3px rgba(255, 255, 255, 1),
+            8px -10px 0 -3px rgba(200, 230, 255, 0.8),
+            -5px -8px 0 -3px rgba(255, 255, 255, 0.9);
+        }
+        75% {
+          box-shadow: 
+            -10px 5px 0 -4px rgba(255, 255, 255, 0.5),
+            8px -10px 0 -4px rgba(200, 230, 255, 0.4),
+            -5px -8px 0 -4px rgba(255, 255, 255, 0.45);
+        }
+        100% {
+          box-shadow: 
+            10px -5px 0 -4px rgba(255, 255, 255, 0),
+            -8px 10px 0 -4px rgba(200, 230, 255, 0),
+            5px 8px 0 -4px rgba(255, 255, 255, 0);
+        }
+      }
+    `,
+    shapeAnimation: 'frost-breathe 4s ease-in-out infinite',
+    beforeAnimation: 'ice-crystals 3s ease-in-out infinite',
+    afterAnimation: 'frost-sparkle 2s linear infinite',
+  },
+
+  // ========== LAVA FLOW - Effetto lava ==========
+  lava: {
+    name: 'lava',
+    label: 'Lava Flow',
+    category: 'climate',
+    keyframes: `
+      @keyframes lava-bubble {
+        0%, 100% { 
+          transform: scale(1); 
+          border-radius: 50%;
+        }
+        20% { 
+          transform: scale(1.02); 
+          border-radius: 48% 52% 50% 50%;
+        }
+        40% { 
+          transform: scale(1.04); 
+          border-radius: 52% 48% 48% 52%;
+        }
+        60% { 
+          transform: scale(1.03); 
+          border-radius: 50% 50% 52% 48%;
+        }
+        80% { 
+          transform: scale(1.01); 
+          border-radius: 48% 52% 50% 50%;
+        }
+      }
+      @keyframes lava-glow {
+        0%, 100% {
+          box-shadow: 
+            0 0 20px 10px rgba(255, 100, 0, 0.8),
+            0 0 40px 20px rgba(255, 50, 0, 0.5),
+            0 0 60px 30px rgba(200, 0, 0, 0.3),
+            inset 0 -10px 30px rgba(255, 200, 0, 0.6);
+          filter: brightness(1) saturate(1.3);
+        }
+        50% {
+          box-shadow: 
+            0 0 30px 15px rgba(255, 150, 0, 1),
+            0 0 60px 30px rgba(255, 80, 0, 0.7),
+            0 0 90px 45px rgba(200, 30, 0, 0.4),
+            inset 0 -15px 40px rgba(255, 220, 50, 0.8);
+          filter: brightness(1.2) saturate(1.5);
+        }
+      }
+      @keyframes lava-cracks {
+        0%, 100% {
+          box-shadow: 
+            -5px 0 15px -8px rgba(255, 200, 0, 0.9),
+            5px 3px 15px -8px rgba(255, 150, 0, 0.8),
+            -3px -5px 15px -8px rgba(255, 100, 0, 0.85);
+        }
+        50% {
+          box-shadow: 
+            5px 0 20px -6px rgba(255, 220, 50, 1),
+            -5px -3px 20px -6px rgba(255, 180, 0, 0.9),
+            3px 5px 20px -6px rgba(255, 130, 0, 0.95);
+        }
+      }
+    `,
+    shapeAnimation: 'lava-bubble 3s ease-in-out infinite',
+    beforeAnimation: 'lava-glow 2s ease-in-out infinite',
+    afterAnimation: 'lava-cracks 1.5s ease-in-out infinite',
+  },
 };
 
 export const ANIMATION_LIST = Object.keys(ANIMATIONS);
