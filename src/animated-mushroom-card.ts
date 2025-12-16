@@ -137,7 +137,7 @@ class ActionHandlerDirective extends Directive {
 const actionHandler = directive(ActionHandlerDirective);
 
 // ========== Card Registration ==========
-const CARD_VERSION = '1.0.0';
+const CARD_VERSION = '1.1.0';
 
 console.info(
   `%c ANIMATED-MUSHROOM-CARD %c v${CARD_VERSION} `,
