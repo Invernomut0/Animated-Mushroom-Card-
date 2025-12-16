@@ -19,23 +19,124 @@ import {
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { Directive, directive, DirectiveParameters, ElementPart } from 'lit/directive.js';
 import {
   HomeAssistant,
   hasAction,
-  ActionHandlerEvent,
   handleAction,
   LovelaceCard,
   LovelaceCardEditor,
   computeStateDisplay,
   stateIcon,
   computeDomain,
+  ActionHandlerEvent,
 } from 'custom-card-helpers';
 
 import { AnimatedMushroomCardConfig, DEFAULT_CONFIG } from './types';
 import { ANIMATIONS, AnimationDefinition } from './animations';
 import { COLORS, getColorRgb, hexToRgb } from './colors';
 
-// Register custom card info
+// ========== Custom Action Handler Directive ==========
+interface ActionHandlerOptions {
+  hasHold?: boolean;
+  hasDoubleClick?: boolean;
+}
+
+class ActionHandlerDirective extends Directive {
+  private element!: HTMLElement;
+  private holdTimer?: ReturnType<typeof setTimeout>;
+  private held = false;
+  private dblClickTimeout?: ReturnType<typeof setTimeout>;
+
+  render(_options: ActionHandlerOptions) {
+    return nothing;
+  }
+
+  update(part: ElementPart, [options]: DirectiveParameters<this>) {
+    const element = part.element as HTMLElement;
+    if (this.element !== element) {
+      this.element = element;
+      this.setupListeners(options);
+    }
+    return nothing;
+  }
+
+  private setupListeners(options: ActionHandlerOptions): void {
+    const handleStart = (ev: Event) => {
+      this.held = false;
+      if (options.hasHold) {
+        this.holdTimer = setTimeout(() => {
+          this.held = true;
+          this.fireEvent('hold');
+        }, 500);
+      }
+    };
+
+    const handleEnd = (ev: Event) => {
+      if (this.holdTimer) {
+        clearTimeout(this.holdTimer);
+        this.holdTimer = undefined;
+      }
+      if (this.held) {
+        this.held = false;
+        return;
+      }
+      
+      if (options.hasDoubleClick) {
+        if (this.dblClickTimeout) {
+          clearTimeout(this.dblClickTimeout);
+          this.dblClickTimeout = undefined;
+          this.fireEvent('double_tap');
+        } else {
+          this.dblClickTimeout = setTimeout(() => {
+            this.dblClickTimeout = undefined;
+            this.fireEvent('tap');
+          }, 250);
+        }
+      } else {
+        this.fireEvent('tap');
+      }
+    };
+
+    const handleCancel = () => {
+      if (this.holdTimer) {
+        clearTimeout(this.holdTimer);
+        this.holdTimer = undefined;
+      }
+      this.held = false;
+    };
+
+    // Touch events
+    this.element.addEventListener('touchstart', handleStart, { passive: true });
+    this.element.addEventListener('touchend', handleEnd);
+    this.element.addEventListener('touchcancel', handleCancel);
+
+    // Mouse events
+    this.element.addEventListener('mousedown', handleStart);
+    this.element.addEventListener('mouseup', handleEnd);
+    this.element.addEventListener('mouseleave', handleCancel);
+
+    // Prevent context menu on long press
+    this.element.addEventListener('contextmenu', (ev) => {
+      if (options.hasHold) {
+        ev.preventDefault();
+      }
+    });
+  }
+
+  private fireEvent(action: string): void {
+    const event = new CustomEvent<{ action: string }>('action', {
+      bubbles: true,
+      composed: true,
+      detail: { action },
+    });
+    this.element.dispatchEvent(event);
+  }
+}
+
+const actionHandler = directive(ActionHandlerDirective);
+
+// ========== Card Registration ==========
 const CARD_VERSION = '1.0.0';
 
 console.info(
@@ -109,12 +210,25 @@ export class AnimatedMushroomCard extends LitElement implements LovelaceCard {
     }
   }
 
+  private _isEntityActive(): boolean {
+    const stateObj = this.hass.states[this._config.entity];
+    if (!stateObj) return false;
+    const state = stateObj.state;
+    return ['on', 'playing', 'home', 'open', 'unlocked', 'active', 'heating', 'cooling', 'cleaning'].includes(state);
+  }
+
   private _getColorRgb(): string {
+    const stateObj = this.hass.states[this._config.entity];
+    
+    // Se l'entità è spenta/inattiva, restituisci grigio
+    if (!this._isEntityActive()) {
+      return COLORS.disabled.rgb;
+    }
+
     const colorConfig = this._config.icon_color || 'state';
     
     if (colorConfig === 'state') {
       // Use entity state color
-      const stateObj = this.hass.states[this._config.entity];
       if (stateObj) {
         const domain = computeDomain(this._config.entity);
         const state = stateObj.state;
@@ -122,9 +236,6 @@ export class AnimatedMushroomCard extends LitElement implements LovelaceCard {
         // Map common states to colors
         if (state === 'on' || state === 'home' || state === 'playing') {
           return COLORS.amber.rgb;
-        }
-        if (state === 'off' || state === 'not_home' || state === 'paused' || state === 'idle') {
-          return COLORS.grey.rgb;
         }
         if (state === 'unavailable' || state === 'unknown') {
           return COLORS.disabled.rgb;
@@ -222,7 +333,15 @@ export class AnimatedMushroomCard extends LitElement implements LovelaceCard {
     }
 
     return html`
-      <ha-card class=${classMap(cardClasses)}>
+      <ha-card 
+        class=${classMap(cardClasses)}
+        @action=${this._handleAction}
+        .actionHandler=${actionHandler({
+          hasHold: hasAction(this._config.hold_action),
+          hasDoubleClick: hasAction(this._config.double_tap_action),
+        })}
+        tabindex="0"
+      >
         <style>
           ${animation.keyframes}
         </style>
@@ -230,8 +349,6 @@ export class AnimatedMushroomCard extends LitElement implements LovelaceCard {
           <div 
             class=${classMap(iconContainerClasses)}
             style=${styleMap(animationStyles)}
-            @action=${this._handleAction}
-            .actionHandler=${this._actionHandler()}
           >
             <div class=${classMap(shapeClasses)}>
               <ha-icon .icon=${icon}></ha-icon>
@@ -244,13 +361,6 @@ export class AnimatedMushroomCard extends LitElement implements LovelaceCard {
         </div>
       </ha-card>
     `;
-  }
-
-  private _actionHandler() {
-    return {
-      hasHold: hasAction(this._config.hold_action),
-      hasDoubleClick: hasAction(this._config.double_tap_action),
-    };
   }
 
   static get styles(): CSSResultGroup {

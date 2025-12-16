@@ -308,15 +308,16 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
         <div class="config-section">
           <label class="section-title">Actions</label>
           
+          <!-- Tap Action -->
           <div class="config-row">
             <label class="section-label">Tap Action</label>
             <ha-select
               .value=${this._config.tap_action?.action || 'toggle'}
-              .configValue=${'tap_action'}
               @selected=${(ev: CustomEvent) => {
+                const action = (ev.target as any).value;
                 this._config = {
                   ...this._config,
-                  tap_action: { action: (ev.target as any).value },
+                  tap_action: { action },
                 };
                 fireEvent(this, 'config-changed', { config: this._config });
               }}
@@ -332,15 +333,197 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
             </ha-select>
           </div>
 
+          <!-- Tap Action Details -->
+          ${this._config.tap_action?.action === 'call-service' ? html`
+            <div class="config-row action-detail">
+              <ha-textfield
+                .label=${'Service (e.g., light.turn_on)'}
+                .value=${this._config.tap_action?.service || ''}
+                @input=${(ev: Event) => {
+                  this._config = {
+                    ...this._config,
+                    tap_action: {
+                      action: 'call-service' as const,
+                      service: (ev.target as HTMLInputElement).value,
+                      service_data: this._config.tap_action?.service_data,
+                    },
+                  };
+                  fireEvent(this, 'config-changed', { config: this._config });
+                }}
+              ></ha-textfield>
+              <ha-textfield
+                .label=${'Service Data (JSON)'}
+                .value=${this._config.tap_action?.service_data ? JSON.stringify(this._config.tap_action.service_data) : ''}
+                @input=${(ev: Event) => {
+                  try {
+                    const data = JSON.parse((ev.target as HTMLInputElement).value || '{}');
+                    this._config = {
+                      ...this._config,
+                      tap_action: {
+                        action: 'call-service' as const,
+                        service: this._config.tap_action?.service || '',
+                        service_data: data,
+                      },
+                    };
+                    fireEvent(this, 'config-changed', { config: this._config });
+                  } catch (e) {}
+                }}
+                placeholder='{"brightness": 255}'
+              ></ha-textfield>
+            </div>
+          ` : nothing}
+          ${this._config.tap_action?.action === 'navigate' ? html`
+            <div class="config-row action-detail">
+              <ha-textfield
+                .label=${'Navigation Path'}
+                .value=${this._config.tap_action?.navigation_path || ''}
+                @input=${(ev: Event) => {
+                  this._config = {
+                    ...this._config,
+                    tap_action: {
+                      action: 'navigate' as const,
+                      navigation_path: (ev.target as HTMLInputElement).value,
+                    },
+                  };
+                  fireEvent(this, 'config-changed', { config: this._config });
+                }}
+                placeholder='/lovelace/1'
+              ></ha-textfield>
+            </div>
+          ` : nothing}
+          ${this._config.tap_action?.action === 'url' ? html`
+            <div class="config-row action-detail">
+              <ha-textfield
+                .label=${'URL'}
+                .value=${this._config.tap_action?.url_path || ''}
+                @input=${(ev: Event) => {
+                  this._config = {
+                    ...this._config,
+                    tap_action: {
+                      action: 'url' as const,
+                      url_path: (ev.target as HTMLInputElement).value,
+                    },
+                  };
+                  fireEvent(this, 'config-changed', { config: this._config });
+                }}
+                placeholder='https://example.com'
+              ></ha-textfield>
+            </div>
+          ` : nothing}
+
+          <!-- Hold Action -->
           <div class="config-row">
             <label class="section-label">Hold Action</label>
             <ha-select
               .value=${this._config.hold_action?.action || 'more-info'}
-              .configValue=${'hold_action'}
               @selected=${(ev: CustomEvent) => {
+                const action = (ev.target as any).value;
                 this._config = {
                   ...this._config,
-                  hold_action: { action: (ev.target as any).value },
+                  hold_action: { action },
+                };
+                fireEvent(this, 'config-changed', { config: this._config });
+              }}
+              @closed=${(ev: Event) => ev.stopPropagation()}
+              fixedMenuPosition
+            >
+              <mwc-list-item value="toggle">Toggle</mwc-list-item>
+              <mwc-list-item value="more-info">More Info</mwc-list-item>
+              <mwc-list-item value="call-service">Call Service</mwc-list-item>
+              <mwc-list-item value="navigate">Navigate</mwc-list-item>
+              <mwc-list-item value="url">URL</mwc-list-item>
+              <mwc-list-item value="none">None</mwc-list-item>
+            </ha-select>
+          </div>
+
+          <!-- Hold Action Details -->
+          ${this._config.hold_action?.action === 'call-service' ? html`
+            <div class="config-row action-detail">
+              <ha-textfield
+                .label=${'Service (e.g., light.turn_off)'}
+                .value=${this._config.hold_action?.service || ''}
+                @input=${(ev: Event) => {
+                  this._config = {
+                    ...this._config,
+                    hold_action: {
+                      action: 'call-service' as const,
+                      service: (ev.target as HTMLInputElement).value,
+                      service_data: this._config.hold_action?.service_data,
+                    },
+                  };
+                  fireEvent(this, 'config-changed', { config: this._config });
+                }}
+              ></ha-textfield>
+              <ha-textfield
+                .label=${'Service Data (JSON)'}
+                .value=${this._config.hold_action?.service_data ? JSON.stringify(this._config.hold_action.service_data) : ''}
+                @input=${(ev: Event) => {
+                  try {
+                    const data = JSON.parse((ev.target as HTMLInputElement).value || '{}');
+                    this._config = {
+                      ...this._config,
+                      hold_action: {
+                        action: 'call-service' as const,
+                        service: this._config.hold_action?.service || '',
+                        service_data: data,
+                      },
+                    };
+                    fireEvent(this, 'config-changed', { config: this._config });
+                  } catch (e) {}
+                }}
+                placeholder='{"brightness": 0}'
+              ></ha-textfield>
+            </div>
+          ` : nothing}
+          ${this._config.hold_action?.action === 'navigate' ? html`
+            <div class="config-row action-detail">
+              <ha-textfield
+                .label=${'Navigation Path'}
+                .value=${this._config.hold_action?.navigation_path || ''}
+                @input=${(ev: Event) => {
+                  this._config = {
+                    ...this._config,
+                    hold_action: {
+                      action: 'navigate' as const,
+                      navigation_path: (ev.target as HTMLInputElement).value,
+                    },
+                  };
+                  fireEvent(this, 'config-changed', { config: this._config });
+                }}
+                placeholder='/lovelace/settings'
+              ></ha-textfield>
+            </div>
+          ` : nothing}
+          ${this._config.hold_action?.action === 'url' ? html`
+            <div class="config-row action-detail">
+              <ha-textfield
+                .label=${'URL'}
+                .value=${this._config.hold_action?.url_path || ''}
+                @input=${(ev: Event) => {
+                  this._config = {
+                    ...this._config,
+                    hold_action: {
+                      action: 'url' as const,
+                      url_path: (ev.target as HTMLInputElement).value,
+                    },
+                  };
+                  fireEvent(this, 'config-changed', { config: this._config });
+                }}
+                placeholder='https://example.com'
+              ></ha-textfield>
+            </div>
+          ` : nothing}
+
+          <!-- Double Tap Action -->
+          <div class="config-row">
+            <label class="section-label">Double Tap Action</label>
+            <ha-select
+              .value=${this._config.double_tap_action?.action || 'none'}
+              @selected=${(ev: CustomEvent) => {
+                const action = (ev.target as any).value;
+                this._config = {
+                  ...this._config,
+                  double_tap_action: { action },
                 };
                 fireEvent(this, 'config-changed', { config: this._config });
               }}
@@ -449,6 +632,17 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
 
       mwc-list-item {
         --mdc-list-side-padding: 16px;
+      }
+
+      .action-detail {
+        margin-left: 16px;
+        padding-left: 12px;
+        border-left: 2px solid var(--primary-color);
+        gap: 8px;
+      }
+
+      .action-detail ha-textfield {
+        margin-bottom: 8px;
       }
     `;
   }
