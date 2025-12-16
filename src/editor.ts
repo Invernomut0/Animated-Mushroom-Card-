@@ -110,28 +110,29 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
     const animationsByCategory = this._getAnimationsByCategory();
     const colorOptions = this._getColorOptions();
 
+    // Schema per ha-form - entity selector
+    const entitySchema = [
+      {
+        name: 'entity',
+        required: true,
+        selector: { entity: {} },
+      },
+    ];
+
     return html`
       <div class="card-config">
-        <!-- Entity Selector -->
-        <div class="config-row entity-row">
-          <ha-selector
-            .hass=${this.hass}
-            .selector=${{ entity: {} }}
-            .value=${this._config.entity || ''}
-            .label=${'Entity (Required)'}
-            .required=${true}
-            @value-changed=${(ev: CustomEvent) => {
-              const newValue = ev.detail?.value;
-              if (newValue !== undefined) {
-                this._config = {
-                  ...this._config,
-                  entity: newValue,
-                };
-                fireEvent(this, 'config-changed', { config: this._config });
-              }
-            }}
-          ></ha-selector>
-        </div>
+        <!-- Entity Selector usando ha-form -->
+        <ha-form
+          .hass=${this.hass}
+          .data=${this._config}
+          .schema=${entitySchema}
+          .computeLabel=${(schema: any) => schema.name === 'entity' ? 'Entity (Required)' : schema.name}
+          @value-changed=${(ev: CustomEvent) => {
+            const newConfig = ev.detail.value;
+            this._config = { ...this._config, ...newConfig };
+            fireEvent(this, 'config-changed', { config: this._config });
+          }}
+        ></ha-form>
 
         <!-- Name -->
         <div class="config-row">
