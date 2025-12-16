@@ -117,10 +117,19 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
           <ha-entity-picker
             .hass=${this.hass}
             .value=${this._config.entity || ''}
-            .configValue=${'entity'}
             .label=${'Entity (Required)'}
+            .required=${true}
             allow-custom-entity
-            @value-changed=${this._valueChanged}
+            @value-changed=${(ev: CustomEvent) => {
+              const newValue = ev.detail?.value;
+              if (newValue !== undefined) {
+                this._config = {
+                  ...this._config,
+                  entity: newValue,
+                };
+                fireEvent(this, 'config-changed', { config: this._config });
+              }
+            }}
           ></ha-entity-picker>
         </div>
 
@@ -139,9 +148,15 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
           <ha-icon-picker
             .hass=${this.hass}
             .value=${this._config.icon || ''}
-            .configValue=${'icon'}
             .label=${'Icon (Optional)'}
-            @value-changed=${this._valueChanged}
+            @value-changed=${(ev: CustomEvent) => {
+              const newValue = ev.detail?.value;
+              this._config = {
+                ...this._config,
+                icon: newValue || undefined,
+              };
+              fireEvent(this, 'config-changed', { config: this._config });
+            }}
           ></ha-icon-picker>
         </div>
 
@@ -207,13 +222,43 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
 
         <!-- Animate On State -->
         <div class="config-row">
-          <ha-textfield
-            .label=${'Animate on State (e.g. "on", "playing")'}
+          <label class="section-label">Animate on State</label>
+          <ha-select
             .value=${this._config.animate_on_state || ''}
             .configValue=${'animate_on_state'}
-            @input=${this._valueChanged}
-            placeholder="Leave empty for auto-detect"
-          ></ha-textfield>
+            @selected=${this._valueChanged}
+            @closed=${(ev: Event) => ev.stopPropagation()}
+            fixedMenuPosition
+            naturalMenuWidth
+          >
+            <mwc-list-item value="">Auto-detect (on, playing, home, open)</mwc-list-item>
+            <mwc-list-item disabled class="category-header">Common States</mwc-list-item>
+            <mwc-list-item value="on">On</mwc-list-item>
+            <mwc-list-item value="off">Off</mwc-list-item>
+            <mwc-list-item value="playing">Playing</mwc-list-item>
+            <mwc-list-item value="paused">Paused</mwc-list-item>
+            <mwc-list-item value="idle">Idle</mwc-list-item>
+            <mwc-list-item disabled class="category-header">Presence</mwc-list-item>
+            <mwc-list-item value="home">Home</mwc-list-item>
+            <mwc-list-item value="not_home">Away</mwc-list-item>
+            <mwc-list-item disabled class="category-header">Binary Sensors</mwc-list-item>
+            <mwc-list-item value="open">Open</mwc-list-item>
+            <mwc-list-item value="closed">Closed</mwc-list-item>
+            <mwc-list-item value="locked">Locked</mwc-list-item>
+            <mwc-list-item value="unlocked">Unlocked</mwc-list-item>
+            <mwc-list-item value="detected">Detected</mwc-list-item>
+            <mwc-list-item disabled class="category-header">Climate</mwc-list-item>
+            <mwc-list-item value="heating">Heating</mwc-list-item>
+            <mwc-list-item value="cooling">Cooling</mwc-list-item>
+            <mwc-list-item value="heat_cool">Heat/Cool</mwc-list-item>
+            <mwc-list-item disabled class="category-header">Vacuum</mwc-list-item>
+            <mwc-list-item value="cleaning">Cleaning</mwc-list-item>
+            <mwc-list-item value="docked">Docked</mwc-list-item>
+            <mwc-list-item value="returning">Returning</mwc-list-item>
+            <mwc-list-item disabled class="category-header">Media</mwc-list-item>
+            <mwc-list-item value="standby">Standby</mwc-list-item>
+            <mwc-list-item value="buffering">Buffering</mwc-list-item>
+          </ha-select>
         </div>
 
         <!-- Layout -->
