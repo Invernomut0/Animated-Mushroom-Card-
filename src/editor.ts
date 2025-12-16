@@ -113,13 +113,13 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
     return html`
       <div class="card-config">
         <!-- Entity Selector -->
-        <div class="config-row">
-          <ha-entity-picker
+        <div class="config-row entity-row">
+          <ha-selector
             .hass=${this.hass}
+            .selector=${{ entity: {} }}
             .value=${this._config.entity || ''}
             .label=${'Entity (Required)'}
             .required=${true}
-            allow-custom-entity
             @value-changed=${(ev: CustomEvent) => {
               const newValue = ev.detail?.value;
               if (newValue !== undefined) {
@@ -130,7 +130,7 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
                 fireEvent(this, 'config-changed', { config: this._config });
               }
             }}
-          ></ha-entity-picker>
+          ></ha-selector>
         </div>
 
         <!-- Name -->
@@ -399,8 +399,13 @@ export class AnimatedMushroomCardEditor extends LitElement implements LovelaceCa
       ha-entity-picker,
       ha-textfield,
       ha-icon-picker,
-      ha-select {
+      ha-select,
+      ha-selector {
         width: 100%;
+      }
+
+      .entity-row ha-selector {
+        display: block;
       }
 
       ha-select {
