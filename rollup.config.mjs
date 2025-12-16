@@ -8,7 +8,7 @@ const dev = process.env.ROLLUP_WATCH;
 export default {
   input: 'src/animated-mushroom-card.ts',
   output: {
-    file: 'dist/animated-mushroom-card.js',
+    file: 'animated-mushroom-card.js',
     format: 'es',
     sourcemap: dev ? true : false,
     inlineDynamicImports: true,
